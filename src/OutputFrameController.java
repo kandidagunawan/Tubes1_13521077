@@ -172,8 +172,8 @@ public class OutputFrameController {
      */
     private void selectedCoordinates(int i, int j){
         // Invalid when a button with an X or an O is clicked.
-        if (!this.buttons[i][j].getText().equals(""))
-            new Alert(Alert.AlertType.ERROR, "Invalid coordinates: Try again!").showAndWait();
+        if (!this.buttons[i][j].getText().equals("")) {}
+//            new Alert(Alert.AlertType.ERROR, "Invalid coordinates: Try again!").showAndWait();
         // Button must be blank.
         else {
             if (this.playerXTurn) {
@@ -357,10 +357,12 @@ public class OutputFrameController {
         int i = botMove[0];
         int j = botMove[1];
 
-        if (!this.buttons[i][j].getText().equals("")) {
-            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
-            System.exit(1);
-            return;
+        while (!this.buttons[i][j].getText().equals("")) {
+            i = (int) (Math.random()*8);
+            j = (int) (Math.random()*8);
+//            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
+//            System.exit(1);
+//            return;
         }
 
         this.selectedCoordinates(i, j);
