@@ -91,7 +91,7 @@ public class LocalBot extends Bot {
 
 
     public int calculateObjectiveFunction(int scoreX, int scoreO, int maxX, int maxO){
-        return maxO; //kuubah
+        return scoreX - scoreO - maxX + maxO; //kuubah
     }
 
     public int countAdjacentPossibility(int[] currentPos, int[][] currentBoard, String playerTurn){
