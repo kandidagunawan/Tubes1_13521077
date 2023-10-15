@@ -354,11 +354,13 @@ public class OutputFrameController {
 
     private void moveBot() {
         int[][] currentBoard = currentBoardState();
-        int[] botMove = this.bot.move(currentBoard, roundsLeft);
-        int i = botMove[0];
-        int j = botMove[1];
+        int[] botMove = this.bot.move(currentBoard, roundsLeft, isBotFirst, playerXScore, playerOScore);
+        if (botMove.length != 0) {
+            int i = botMove[0];
+            int j = botMove[1];
 
-        this.selectedCoordinates(i, j);
+            this.selectedCoordinates(i, j);
+        }
     }
 
     private int[][] currentBoardState (){

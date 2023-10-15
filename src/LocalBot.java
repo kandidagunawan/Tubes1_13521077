@@ -5,17 +5,15 @@ import java.util.Map;
 import java.util.Random;
 public class LocalBot extends Bot {
     @Override
-    public int[] move(int[][] currentBoard, int round) {
+    public int[] move(int[][] currentBoard, int round, boolean botFirst, int scoreX, int scoreO) {
         /* Variables for the new moves */
         int[] selectedMoves = new int[2];
 
         /* Generate all possible moves */
         List<int[]> possibleMoves = possibleAction(currentBoard);
-        System.out.println(possibleMoves);
 
         /* Get current state value */
-        int scoreX = countScore(currentBoard, "X");
-        int scoreO = countScore(currentBoard, "O");
+
         int maxX = countMaxAdjacent(possibleMoves, currentBoard, "X");
         int maxO = countMaxAdjacent(possibleMoves, currentBoard, "O");
         int currentStateValue = calculateObjectiveFunction(scoreX, scoreO, maxX, maxO);
@@ -31,7 +29,31 @@ public class LocalBot extends Bot {
         Random random = new Random();
         int randomIndex = random.nextInt(possibleMoves.size());
 
-        if (round > 1){
+        if (botFirst) {
+            // Continue with the regular logic
+            if(round == 0){
+                return new int[]{};
+            } else {
+                if (!possibleMoves.isEmpty()) {
+                    if (elapsedTime < 5000) {
+                        if (currentStateValue < neighborStateValue) {
+                            System.out.println("masuk neighbor gede");
+                            return move;
+                        } else {
+                            System.out.println("masuk neighbor kecil");
+                            return possibleMoves.get(randomIndex);
+                        }
+                    } else {
+                        System.out.println("masuk timeout");
+                        return possibleMoves.get(randomIndex);
+                    }
+                } else {
+                    System.out.println("masa ga ada possible moves");
+                    return new int[]{(int) (Math.random() * 8), (int) (Math.random() * 8)};
+                }
+            }
+        } else {
+            // Regular logic for the case when bot doesn't start first
             if (!possibleMoves.isEmpty()) {
                 if (elapsedTime < 5000) {
                     if (currentStateValue < neighborStateValue) {
@@ -47,32 +69,19 @@ public class LocalBot extends Bot {
                 }
             } else {
                 System.out.println("masa ga ada possible moves");
-                return new int[]{(int) (Math.random()*8), (int) (Math.random()*8)};
+                return new int[]{(int) (Math.random() * 8), (int) (Math.random() * 8)};
             }
-        } else {
-            return move;
         }
     }
 
-    public int countScore(int[][] currentBoard, String player){
+    public int countScore(int[][] currentBoard, String player) {
         int score = 0;
         int playerValue = (player.equals("X")) ? 1 : 2;
 
         for (int i = 0; i < currentBoard.length; i++) {
             for (int j = 0; j < currentBoard[0].length; j++) {
-                if (currentBoard[i][j] == playerValue) {
-                    if (i - 1 >= 0 && currentBoard[i - 1][j] == playerValue) {
-                        score++;
-                    }
-                    if (i + 1 < currentBoard.length && currentBoard[i + 1][j] == playerValue) {
-                        score++;
-                    }
-                    if (j - 1 >= 0 && currentBoard[i][j - 1] == playerValue) {
-                        score++;
-                    }
-                    if (j + 1 < currentBoard[0].length && currentBoard[i][j + 1] == playerValue) {
-                        score++;
-                    }
+                if(currentBoard[i][j] == playerValue){
+                    score++;
                 }
             }
         }
@@ -82,7 +91,7 @@ public class LocalBot extends Bot {
 
 
     public int calculateObjectiveFunction(int scoreX, int scoreO, int maxX, int maxO){
-        return scoreO - scoreX - maxX + maxO; //kuubah
+        return maxO; //kuubah
     }
 
     public int countAdjacentPossibility(int[] currentPos, int[][] currentBoard, String playerTurn){
@@ -171,12 +180,21 @@ public class LocalBot extends Bot {
             // Generate all possible moves
             int[][] currentBoardNeighbor = generateNeighborBoard(currentMove, currentBoard, "O");
             List<int[]> possibleMovesNeighbor = possibleAction(currentBoardNeighbor);
-
+            for (int k = 0; k < currentBoardNeighbor.length; k++) {
+                for (int j = 0; j < currentBoardNeighbor[0].length; j++) {
+                    System.out.print(currentBoardNeighbor[k][j] + " ");
+                }
+                System.out.println();  // Move to the next line after each row
+            }
             // Get current state value
             int scoreX = countScore(currentBoardNeighbor, "X");
             int scoreO = countScore(currentBoardNeighbor, "O");
+            System.out.println("Score bru X" + scoreX);
+            System.out.println("Score bru O" + scoreO);
             int maxX = countMaxAdjacent(possibleMovesNeighbor, currentBoardNeighbor, "X");
+            System.out.println("max X" + maxX);
             int maxO = countMaxAdjacent(possibleMovesNeighbor, currentBoardNeighbor, "O");
+            System.out.println("max O" + maxO);
             int currentStateValue = calculateObjectiveFunction(scoreX, scoreO, maxX, maxO);
 
             // Update highestNeighborMove if a higher score is found
