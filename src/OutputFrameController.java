@@ -77,7 +77,7 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        this.bot = new LocalBot();
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -353,18 +353,29 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move();
+        int[][] currentBoard = currentBoardState();
+        int[] botMove = this.bot.move(currentBoard, roundsLeft);
         int i = botMove[0];
         int j = botMove[1];
 
-        while (!this.buttons[i][j].getText().equals("")) {
-            i = (int) (Math.random()*8);
-            j = (int) (Math.random()*8);
-//            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
-//            System.exit(1);
-//            return;
-        }
-
         this.selectedCoordinates(i, j);
+    }
+
+    private int[][] currentBoardState (){
+        int[][] boardState = new int[ROW][COL];
+
+        for(int i = 0; i < ROW; i++){
+            for(int j = 0; j < COL; j++){
+                String buttonText = buttons[i][j].getText();
+                if(buttonText.equals("X")){
+                    boardState[i][j] = 1;
+                } else if(buttonText.equals("O")){
+                    boardState[i][j] = 2;
+                } else {
+                    boardState[i][j] = 0;
+                }
+            }
+        }
+        return boardState;
     }
 }
