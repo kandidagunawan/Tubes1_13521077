@@ -77,7 +77,7 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        this.bot = new LocalSearchStochasticBot();
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -357,14 +357,7 @@ public class OutputFrameController {
         int i = botMove[0];
         int j = botMove[1];
 
-        while (!this.buttons[i][j].getText().equals("")) {
-            i = (int) (Math.random()*8);
-            j = (int) (Math.random()*8);
-//            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
-//            System.exit(1);
-//            return;
-        }
-
         this.selectedCoordinates(i, j);
+
     }
 }
