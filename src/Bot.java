@@ -8,13 +8,29 @@ public class Bot {
         return countPlayerScore(button, "O") - countPlayerScore(button, "X");
         // Belum implement max adjacent
     }
+    public Button[][] copyButton(Button[][] buttons){
+        Button[][] secButton = new Button[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (buttons[i][j] != null) {
+                    secButton[i][j] = new Button();
+                    secButton[i][j].setText(buttons[i][j].getText());
+                } else {
+                    secButton[i][j] = null;
+                }
+            }
+        }
+        return secButton;
+    }
     public int[] move(Button[][] button, int roundLeft, boolean isBotFirst) {
         System.out.println("Masuk move");
         return alphaBetaSearch(button, roundLeft, isBotFirst);
     }
     public int[] alphaBetaSearch(Button[][] button, int roundLeft, boolean isBotFirst) {
         System.out.println("Masuk alpha beta");
-        resultMinMax res = maxValue(button, roundLeft, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, isBotFirst);
+        Button[][] dumbButton = copyButton(button);
+        resultMinMax res = maxValue(dumbButton, roundLeft, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, isBotFirst);
+        System.out.println("Hasil diambil " + res.getNextPosition()[0] + ", " + res.getNextPosition()[1]);
         return res.getNextPosition();
     }
     public resultMinMax maxValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst) {
@@ -45,7 +61,7 @@ public class Bot {
             System.out.println(possiblePos[0] + ", " + possiblePos[1] + " = " + countPlayerScore(button, "X") + ", " + countPlayerScore(button, "O"));
 
             resultMinMax result = minValue(button, newRoundLeft, alpha, beta, isBotFirst);
-            System.out.println("Value = " + result.getValue());
+            System.out.println("Current " + currentValue +" / Value = " + result.getValue());
             double nextValue = result.getValue();
             if (nextValue > currentValue) {
                 currentValue = nextValue;
@@ -61,8 +77,10 @@ public class Bot {
                     button[adjPos[0]][adjPos[1]].setText("X");
                 }
             }
-            System.out.println("Choosen " + currentMove[0] + ", " + currentMove[1] + " Val " + currentValue);
+            System.out.println("Chosen " + currentMove[0] + ", " + currentMove[1] + " Val " + currentValue);
         }
+        System.out.println("return Max " + currentMove[0] + ", " + currentMove[1] + " = " + currentValue);
+        System.out.println();
         return new resultMinMax(currentMove, currentValue);
     }
 
@@ -93,7 +111,7 @@ public class Bot {
 
             System.out.println(possiblePos[0] + ", " + possiblePos[1] + " = " + countPlayerScore(button, "X") + ", " + countPlayerScore(button, "O"));
             resultMinMax result = maxValue(button, newRoundLeft, alpha, beta, isBotFirst);
-            System.out.println("Value = " + result.getValue());
+            System.out.println("Current " + currentValue +" / Value = " + result.getValue());
             double nextValue = result.getValue();
             if (nextValue < currentValue) {
                 currentValue = nextValue;
@@ -109,8 +127,10 @@ public class Bot {
                     button[adjPos[0]][adjPos[1]].setText("O");
                 }
             }
-            System.out.println("Choosen " + currentMove[0] + ", " + currentMove[1] + " Val " + currentValue);
+            System.out.println("Chosen " + currentMove[0] + ", " + currentMove[1] + " Val " + currentValue);
         }
+        System.out.println("return Min " + currentMove[0] + ", " + currentMove[1] + " = " + currentValue);
+        System.out.println();
         return new resultMinMax(currentMove, currentValue);
     }
     public List<int[]> possibleAction(Button[][] button){
