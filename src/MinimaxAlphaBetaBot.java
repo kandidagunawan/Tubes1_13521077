@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MinimaxAlphaBetaBot extends Bot {
-    public int calculateObjectiveFunction(Button[][] button) {
-        return countPlayerScore(button, "O") - countPlayerScore(button, "X");
-        // Belum implement max adjacent
-    }
     public Button[][] copyButton(Button[][] buttons){
         Button[][] secButton = new Button[8][8];
         for (int i = 0; i < 8; i++) {
@@ -28,9 +24,9 @@ public class MinimaxAlphaBetaBot extends Bot {
         return res.getNextPosition();
     }
     public resultMinMax maxValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst) {
-        List<int[]> emptyPos = possibleAction(button);
+        List<int[]> emptyPos = generate_empty_cell(button);
         if (roundLeft == 0 || emptyPos.size() == 0) {
-            return new resultMinMax(null, calculateObjectiveFunction(button));
+            return new resultMinMax(null, objectiveFunction(null, button, roundLeft));
         }
 
         int newRoundLeft = roundLeft;
@@ -84,9 +80,9 @@ public class MinimaxAlphaBetaBot extends Bot {
     }
 
     public resultMinMax minValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst) {
-        List<int[]> emptyPos = possibleAction(button);
+        List<int[]> emptyPos = generate_empty_cell(button);
         if (roundLeft == 0 || emptyPos.size() == 0) {
-            return new resultMinMax(null, calculateObjectiveFunction(button));
+            return new resultMinMax(null, objectiveFunction(null, button, roundLeft));
         }
 
         int newRoundLeft = roundLeft;
@@ -139,29 +135,6 @@ public class MinimaxAlphaBetaBot extends Bot {
         }
         return new resultMinMax(currentMove, currentValue);
     }
-    public List<int[]> possibleAction(Button[][] button){
-        List<int[]> emptyPos = new ArrayList<>();
-        for (int i = 7; i >= 0; i--){
-            for (int j = 0; j < 8; j++){
-                if (button[i][j].getText().equals("")){
-                    int[] position = {i,j};
-                    emptyPos.add(position);
-                }
-            }
-        }
-        return emptyPos;
-    }
-    public int countPlayerScore(Button[][] button, String player){
-        int score = 0;
-        for (int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if (button[i][j].getText().equals(player)){
-                    score++;
-                }
-            }
-        }
-        return score;
-    }
     public List<int[]> changeAdjacent(int[] currentPos, Button[][] button, String playerTurn) {
         // Adjacent Position
         int[][] adjacent = {
@@ -199,11 +172,11 @@ public class MinimaxAlphaBetaBot extends Bot {
             j = (int) (Math.random()*8);
         } while (button[i][j].getText().equals(""));
         int[] move = {i, j};
-        int value = calculateObjectiveFunction(button);
+        int value = objectiveFunction(move, button, 0);
         return new resultMinMax(move, value);
     }
     public resultMinMax getFallbackMove(Button[][] button, String playerTurn){
-        List<int[]> emptyPos = possibleAction(button);
+        List<int[]> emptyPos = generate_empty_cell(button);
         double maxVal = Double.NEGATIVE_INFINITY;
         int[] maxPosition = {-1, -1};
 
@@ -218,7 +191,7 @@ public class MinimaxAlphaBetaBot extends Bot {
                 }
             }
 
-            int value = calculateObjectiveFunction(button);
+            int value = objectiveFunction(possiblePos, button, 0);
             if (value > maxVal) {
                 maxVal = value;
                 maxPosition = possiblePos;
