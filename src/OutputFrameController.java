@@ -51,6 +51,7 @@ public class OutputFrameController {
     private int roundsLeft;
     private boolean isBotFirst;
     private Bot bot;
+    private Bot bot2;
 
 
 
@@ -79,29 +80,39 @@ public class OutputFrameController {
 
         // Start bot
         /*this.bot = new Bot();*/
-        if(!botAlgoX.equals("Human")){
-            if (botAlgoO.equals("Local Search")){
+        if(!botAlgoX.equals("Human")) {
+            if (botAlgoX.equals("Local Search")) {
+                this.bot = new LocalSearchStochasticBot();
+            } else if (botAlgoX.equals("Minmax")) {
                 this.bot = new Bot();
-                this.moveBot();
+            } else if (botAlgoX.equals("Genetic")) {
+                this.bot = new Bot();
+            }
+
+            if (botAlgoO.equals("Local Search")){
+                this.bot2 = new LocalSearchStochasticBot();
+            } else if (botAlgoO.equals("Minmax")){
+                this.bot2 = new Bot();
+            } else if (botAlgoO.equals("Genetic")){
+                this.bot2 = new Bot();
+            }
+            this.playerXTurn = !isBotFirst;
+            if (this.isBotFirst) {
+                this.moveBot2();
+            }
+            BotVsBotGame();
+        } else {
+            if (botAlgoO.equals("Local Search")){
+                this.bot = new LocalSearchStochasticBot();
             } else if (botAlgoO.equals("Minmax")){
                 this.bot = new Bot();
-                this.moveBot();
             } else if (botAlgoO.equals("Genetic")){
                 this.bot = new Bot();
+            }
+            this.playerXTurn = !isBotFirst;
+            if (this.isBotFirst) {
                 this.moveBot();
             }
-        }
-
-        if (botAlgoO.equals("Local Search")){
-            this.bot = new Bot();
-        } else if (botAlgoO.equals("Minmax")){
-            this.bot = new Bot();
-        } else if (botAlgoO.equals("Genetic")){
-            this.bot = new Bot();
-        }
-        this.playerXTurn = !isBotFirst;
-        if (this.isBotFirst) {
-            this.moveBot();
         }
     }
 
@@ -373,8 +384,26 @@ public class OutputFrameController {
         primaryStage.show();
     }
 
+    private void BotVsBotGame(){
+        while(this.roundsLeft > 0){
+            if(this.playerXTurn){
+                moveBot();
+            } else {
+                moveBot2();
+            }
+        }
+    }
+
     private void moveBot() {
         int[] botMove = this.bot.move(this.buttons, this.roundsLeft, this.isBotFirst);
+        int i = botMove[0];
+        int j = botMove[1];
+
+        this.selectedCoordinates(i, j);
+    }
+
+    private void moveBot2() {
+        int[] botMove = this.bot2.move(this.buttons, this.roundsLeft, this.isBotFirst);
         int i = botMove[0];
         int j = botMove[1];
 
