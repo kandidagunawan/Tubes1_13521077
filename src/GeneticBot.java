@@ -15,6 +15,7 @@ public class GeneticBot extends Bot{
     }
 
     public int[][] runGeneticAlgorithm(Button[][] buttons, int roundLeft, boolean isBotFirst, String botChar){
+        long startTime = System.currentTimeMillis();
         Random random = new Random();
         int[][] bestChromosome = null;
         int bestFitness = 0;
@@ -27,6 +28,10 @@ public class GeneticBot extends Bot{
                     bestFitness = fitness;
                     bestChromosome = chromosome;
                 }
+            }
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            if(elapsedTime > 5000){
+                break;
             }
             int[][][] newPopulation = crossoverPopulation(population, roundLeft);
             mutatePopulation(newPopulation, emptyCells, roundLeft);
