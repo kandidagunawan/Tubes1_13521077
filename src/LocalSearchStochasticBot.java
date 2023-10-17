@@ -65,7 +65,7 @@ public class LocalSearchStochasticBot extends Bot{
         List<int[]> positions = generate_empty_cell(button);
 
         if (roundLeft == 0 || positions.size() == 0) {
-            return new int[]{(int) Double.POSITIVE_INFINITY, (int) Double.POSITIVE_INFINITY};
+            return new int[]{};
         }
 
         long startTime = System.currentTimeMillis();
