@@ -61,17 +61,21 @@ public class LocalSearchStochasticBot extends Bot{
     }
 
     public int[] move(Button[][] button, int roundLeft, boolean isBotFirst) {
+        return this.move(button, roundLeft, isBotFirst, "O");
+    }
+
+    public int[] move(Button[][] button, int roundLeft, boolean isBotFirst, String sign) {
         // create random move
 
+        List<int[]> positions = generate_empty_cell(button);
         if (roundLeft == 0 || positions.size() == 0) {
             return new int[]{(int) Double.POSITIVE_INFINITY, (int) Double.POSITIVE_INFINITY};
         }
 
-        long startTime = System.currentTimeMillis();
         int[] current = new int[2];
         int[] next = new int[2];
 
-        List<int[]> positions = generate_empty_cell(button);
+        long startTime = System.currentTimeMillis();
         Random random = new Random();
         int randomIdx = random.nextInt(0, positions.size());
         current[0] = positions.get(randomIdx)[0];
