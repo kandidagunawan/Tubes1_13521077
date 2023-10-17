@@ -78,7 +78,27 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        /*this.bot = new Bot();*/
+        if(!botAlgoX.equals("Human")){
+            if (botAlgoO.equals("Local Search")){
+                this.bot = new Bot();
+                this.moveBot();
+            } else if (botAlgoO.equals("Minmax")){
+                this.bot = new Bot();
+                this.moveBot();
+            } else if (botAlgoO.equals("Genetic")){
+                this.bot = new Bot();
+                this.moveBot();
+            }
+        }
+
+        if (botAlgoO.equals("Local Search")){
+            this.bot = new Bot();
+        } else if (botAlgoO.equals("Minmax")){
+            this.bot = new Bot();
+        } else if (botAlgoO.equals("Genetic")){
+            this.bot = new Bot();
+        }
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
