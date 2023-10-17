@@ -89,11 +89,14 @@ public class MinimaxAlphaBetaBot extends Bot {
             long elapsedTime = System.currentTimeMillis() - startTime;
             if (elapsedTime > 5000){
                 System.out.println("System time out");
+                return getFallbackMove(button);
+                /*
                 if (currentMove == null){
                     return getRandomMove(button);
                 } else {
                     return new resultMinMax(currentMove, currentValue);
                 }
+                */
             }
         }
         assert currentMove != null;
@@ -167,7 +170,7 @@ public class MinimaxAlphaBetaBot extends Bot {
     }
     public List<int[]> possibleAction(Button[][] button){
         List<int[]> emptyPos = new ArrayList<>();
-        for (int i = 0; i < 8; i++){
+        for (int i = 7; i >= 0; i--){
             for (int j = 0; j < 8; j++){
                 if (button[i][j].getText().equals("")){
                     int[] position = {i,j};
@@ -227,5 +230,37 @@ public class MinimaxAlphaBetaBot extends Bot {
         int[] move = {i, j};
         int value = calculateObjectiveFunction(button);
         return new resultMinMax(move, value);
+    }
+    public resultMinMax getFallbackMove(Button[][] button){
+        List<int[]> emptyPos = possibleAction(button);
+        double maxVal = Double.NEGATIVE_INFINITY;
+        int[] maxPosition = {-1, -1};
+
+        for (int[] possiblePos : emptyPos) {
+            List<int[]> changeLabel = changeAdjacent(possiblePos, button, "O");
+
+            // Change label button
+            button[possiblePos[0]][possiblePos[1]].setText("O");
+            if (changeLabel.size() > 0){
+                for(int[] adjPos:changeLabel){
+                    button[adjPos[0]][adjPos[1]].setText("O");
+                }
+            }
+
+            int value = calculateObjectiveFunction(button);
+            if (value > maxVal) {
+                maxVal = value;
+                maxPosition = possiblePos;
+            }
+
+            // Undo label changed
+            button[possiblePos[0]][possiblePos[1]].setText("");
+            if (changeLabel.size() > 0) {
+                for (int[] adjPos : changeLabel) {
+                    button[adjPos[0]][adjPos[1]].setText("X");
+                }
+            }
+        }
+        return new resultMinMax(maxPosition, maxVal);
     }
 }
