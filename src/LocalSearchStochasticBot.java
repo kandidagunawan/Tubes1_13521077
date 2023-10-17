@@ -77,7 +77,7 @@ public class LocalSearchStochasticBot extends Bot{
         current[0] = positions.get(randomIdx)[0];
         current[1] = positions.get(randomIdx)[1];
 
-        int maxIteration = 500;
+        int maxIteration = positions.size();
         int iteration = 0;
         while (iteration < maxIteration) {
             int randomIdx2 = random.nextInt(0, positions.size());
