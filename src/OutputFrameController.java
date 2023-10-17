@@ -53,6 +53,7 @@ public class OutputFrameController {
     private Bot bot;
 
 
+
     private static final int ROW = 8;
     private static final int COL = 8;
     private Button[][] buttons = new Button[ROW][COL];
@@ -77,28 +78,7 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        /*this.bot = new Bot();*/
-        if(!botAlgoX.equals("Human")){
-            if (botAlgoO.equals("Local Search")){
-                this.bot = new Bot();
-                this.moveBot();
-            } else if (botAlgoO.equals("Minmax")){
-                this.bot = new Bot();
-                this.moveBot();
-            } else if (botAlgoO.equals("Genetic")){
-                this.bot = new Bot();
-                this.moveBot();
-            }
-        }
-
-        if (botAlgoO.equals("Local Search")){
-            this.bot = new Bot();
-        } else if (botAlgoO.equals("Minmax")){
-            this.bot = new Bot();
-        } else if (botAlgoO.equals("Genetic")){
-            this.bot = new Bot();
-        }
-
+        this.bot = new Bot();
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -374,17 +354,9 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move();
+        int[] botMove = this.bot.move(this.buttons, this.roundsLeft, this.isBotFirst);
         int i = botMove[0];
         int j = botMove[1];
-
-        while (!this.buttons[i][j].getText().equals("")) {
-            i = (int) (Math.random()*8);
-            j = (int) (Math.random()*8);
-//            new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
-//            System.exit(1);
-//            return;
-        }
 
         this.selectedCoordinates(i, j);
     }
