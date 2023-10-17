@@ -77,7 +77,7 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        this.bot = new GeneticBot();
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -353,7 +353,7 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move();
+        int[] botMove = this.bot.move(this.buttons, this.roundsLeft, this.isBotFirst, "O");
         int i = botMove[0];
         int j = botMove[1];
 
