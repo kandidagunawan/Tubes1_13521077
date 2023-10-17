@@ -12,12 +12,8 @@ public class MinimaxAlphaBetaBot extends Bot {
         Button[][] secButton = new Button[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (buttons[i][j] != null) {
-                    secButton[i][j] = new Button();
-                    secButton[i][j].setText(buttons[i][j].getText());
-                } else {
-                    secButton[i][j] = null;
-                }
+                secButton[i][j] = new Button();
+                secButton[i][j].setText(buttons[i][j].getText());
             }
         }
         return secButton;
@@ -231,8 +227,8 @@ public class MinimaxAlphaBetaBot extends Bot {
             // Undo label changed
             button[possiblePos[0]][possiblePos[1]].setText("");
             if (changeLabel.size() > 0) {
-                for (int[] adjPos : changeLabel) {
-                    if (playerTurn == "O"){
+                for (int[] adjPos: changeLabel) {
+                    if (playerTurn.equals("O")){
                         button[adjPos[0]][adjPos[1]].setText("X");
                     } else {
                         button[adjPos[0]][adjPos[1]].setText("O");

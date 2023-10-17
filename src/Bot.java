@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.control.Button;
+
 
 public class Bot {
 
