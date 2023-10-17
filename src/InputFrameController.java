@@ -46,12 +46,14 @@ public class InputFrameController{
      */
     @FXML
     private void initialize(){
-        ObservableList<String> botAlgorithmX = FXCollections.observableArrayList("Human", "Local Search",
+        ObservableList<String> botAlgorithmX = FXCollections.observableArrayList("", "Human", "Local Search",
                 "Minmax", "Genetic");
         this.botAlgorithmX.setItems(botAlgorithmX);
-        ObservableList<String> botAlgorithmO = FXCollections.observableArrayList("Local Search",
+        this.botAlgorithmX.getSelectionModel().select(0);
+        ObservableList<String> botAlgorithmO = FXCollections.observableArrayList("", "Local Search",
                 "Minmax", "Genetic");
         this.botAlgorithmO.setItems(botAlgorithmO);
+        this.botAlgorithmO.getSelectionModel().select(0);
         ObservableList<String> numberOfRoundsDropdown = FXCollections.observableArrayList(
                 "", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
                 "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28");
@@ -133,17 +135,16 @@ public class InputFrameController{
             return false;
         }
 
-        if (roundNumber.length() == 0) {
-            new Alert(Alert.AlertType.ERROR, "Number of rounds dropdown menu is blank.").showAndWait();
-            return false;
-        }
-
         if (botAlgoX.length() == 0) {
             new Alert(Alert.AlertType.ERROR, "Choose whether you want to be X human or bot.").showAndWait();
             return false;
         }
         if (botAlgoO.length() == 0) {
             new Alert(Alert.AlertType.ERROR, "Choose an algorithm for O.").showAndWait();
+            return false;
+        }
+        if (roundNumber.length() == 0) {
+            new Alert(Alert.AlertType.ERROR, "Number of rounds dropdown menu is blank.").showAndWait();
             return false;
         }
 
