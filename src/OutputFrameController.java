@@ -69,7 +69,7 @@ public class OutputFrameController {
      * @param isBotFirst True if bot is first, false otherwise.
      *
      */
-    void getInput(String name1, String name2, String rounds, boolean isBotFirst){
+    void getInput(String name1, String name2, String rounds, boolean isBotFirst, String botAlgoX, String botAlgoO){
         this.playerXName.setText(name1);
         this.playerOName.setText(name2);
         this.roundsLeftLabel.setText(rounds);
@@ -77,7 +77,28 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        /*this.bot = new Bot();*/
+        if(!botAlgoX.equals("Human")){
+            if (botAlgoO.equals("Local Search")){
+                this.bot = new Bot();
+                this.moveBot();
+            } else if (botAlgoO.equals("Minmax")){
+                this.bot = new Bot();
+                this.moveBot();
+            } else if (botAlgoO.equals("Genetic")){
+                this.bot = new Bot();
+                this.moveBot();
+            }
+        }
+
+        if (botAlgoO.equals("Local Search")){
+            this.bot = new Bot();
+        } else if (botAlgoO.equals("Minmax")){
+            this.bot = new Bot();
+        } else if (botAlgoO.equals("Genetic")){
+            this.bot = new Bot();
+        }
+
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();

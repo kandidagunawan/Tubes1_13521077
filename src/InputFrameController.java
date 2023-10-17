@@ -32,6 +32,12 @@ public class InputFrameController{
     @FXML
     private ComboBox<String> numberOfRounds;
 
+    @FXML
+    private ComboBox<String> botAlgorithmX;
+
+    @FXML
+    private ComboBox<String> botAlgorithmO;
+
 
     /**
      * Initialize the dropdown ComboBox with a list of items that are allowed to be selected.
@@ -40,6 +46,12 @@ public class InputFrameController{
      */
     @FXML
     private void initialize(){
+        ObservableList<String> botAlgorithmX = FXCollections.observableArrayList("Human", "Local Search",
+                "Minmax", "Genetic");
+        this.botAlgorithmX.setItems(botAlgorithmX);
+        ObservableList<String> botAlgorithmO = FXCollections.observableArrayList("Local Search",
+                "Minmax", "Genetic");
+        this.botAlgorithmO.setItems(botAlgorithmO);
         ObservableList<String> numberOfRoundsDropdown = FXCollections.observableArrayList(
                 "", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
                 "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28");
@@ -80,7 +92,8 @@ public class InputFrameController{
 
             // Get controller of output frame and pass input including player names and number of rounds chosen.
             OutputFrameController outputFC = loader.getController();
-            outputFC.getInput(this.player1.getText(), this.player2.getText(), this.numberOfRounds.getValue(), this.isBotFirst.isSelected());
+            outputFC.getInput(this.player1.getText(), this.player2.getText(), this.numberOfRounds.getValue(),
+                    this.isBotFirst.isSelected(), this.botAlgorithmX.getValue(), this.botAlgorithmO.getValue());
 
             // Open the new frame.
             Stage secondaryStage = new Stage();
@@ -102,6 +115,8 @@ public class InputFrameController{
         String playerX = this.player1.getText();
         String playerO = this.player2.getText();
         String roundNumber = this.numberOfRounds.getValue();
+        String botAlgoX = this.botAlgorithmX.getValue();
+        String botAlgoO = this.botAlgorithmO.getValue();
 
         if (playerX.length() == 0) {
             new Alert(Alert.AlertType.ERROR, "Player 1 name is blank.").showAndWait();
@@ -120,6 +135,15 @@ public class InputFrameController{
 
         if (roundNumber.length() == 0) {
             new Alert(Alert.AlertType.ERROR, "Number of rounds dropdown menu is blank.").showAndWait();
+            return false;
+        }
+
+        if (botAlgoX.length() == 0) {
+            new Alert(Alert.AlertType.ERROR, "Choose whether you want to be X human or bot.").showAndWait();
+            return false;
+        }
+        if (botAlgoO.length() == 0) {
+            new Alert(Alert.AlertType.ERROR, "Choose an algorithm for O.").showAndWait();
             return false;
         }
 
