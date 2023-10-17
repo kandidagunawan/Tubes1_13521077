@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Bot {
 
-    public int[] move(Button[][] button, int roundLeft, boolean isBotFirst) {
+    public int[] move(Button[][] button, int roundLeft, boolean isBotFirst, String botChar) {
         // create random move
         return new int[] { (int) (Math.random() * 8), (int) (Math.random() * 8) };
     }
@@ -23,7 +23,7 @@ public class Bot {
         return positions;
     }
 
-    public int objectiveFunction(int[] currentPost, Button[][] button, int roundLeft) {
+    public int objectiveFunction(int[] currentPost, Button[][] button, int roundLeft, String botChar) {
         if (roundLeft > 0) {
             int nilaiAwal = 4;
             int nilaiMin = 0;
@@ -74,7 +74,10 @@ public class Bot {
 
             return result;
         } else {
-            return countPlayerScore(button, "O") - countPlayerScore(button, "X");
+            String oppChar;
+            if(botChar.equals("O")) oppChar = "X";
+            else oppChar = "O";
+            return countPlayerScore(button, botChar) - countPlayerScore(button, oppChar);
         }
     }
     public int countPlayerScore(Button[][] button, String player){
