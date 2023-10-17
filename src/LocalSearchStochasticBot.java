@@ -35,7 +35,7 @@ public class LocalSearchStochasticBot extends Bot{
             next[0] = positions.get(randomIdx2)[0];
             next[1] = positions.get(randomIdx2)[1];
 
-            if (objectiveFunction(next, button, roundLeft) > objectiveFunction(current, button, roundLeft)) {
+            if (objectiveFunction(next, button, roundLeft, "X") > objectiveFunction(current, button, roundLeft, "X")) {
                 current[0] = next[0];
                 current[1] = next[1];
             }

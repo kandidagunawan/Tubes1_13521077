@@ -88,7 +88,7 @@ public class OutputFrameController {
             if (botAlgoX.equals("Local Search")) {
                 this.bot = new LocalSearchStochasticBot();
             } else if (botAlgoX.equals("Minmax")) {
-                this.bot = new Bot();
+                this.bot = new MinimaxAlphaBetaBot();
             } else if (botAlgoX.equals("Genetic")) {
                 this.bot = new Bot();
             }
@@ -96,7 +96,7 @@ public class OutputFrameController {
             if (botAlgoO.equals("Local Search")){
                 this.bot2 = new LocalSearchStochasticBot();
             } else if (botAlgoO.equals("Minmax")){
-                this.bot2 = new Bot();
+                this.bot2 = new MinimaxAlphaBetaBot();
             } else if (botAlgoO.equals("Genetic")){
                 this.bot2 = new Bot();
             }
@@ -111,7 +111,7 @@ public class OutputFrameController {
             if (botAlgoO.equals("Local Search")){
                 this.bot = new LocalSearchStochasticBot();
             } else if (botAlgoO.equals("Minmax")){
-                this.bot = new Bot();
+                this.bot = new MinimaxAlphaBetaBot();
             } else if (botAlgoO.equals("Genetic")){
                 this.bot = new Bot();
             }
@@ -468,7 +468,7 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move(this.buttons, this.roundsLeft, this.isBotFirst);
+        int[] botMove = this.bot.move(this.buttons, this.roundsLeft, this.isBotFirst, "O");
         if (botMove.length != 0) {
             int i = botMove[0];
             int j = botMove[1];
@@ -483,7 +483,7 @@ public class OutputFrameController {
     }
 
     private void moveBot2() {
-        int[] botMove = this.bot2.move(this.buttons, this.roundsLeft, this.isBotFirst);
+        int[] botMove = this.bot2.move(this.buttons, this.roundsLeft, this.isBotFirst, "X");
         int i = botMove[0];
         int j = botMove[1];
         this.selectedCoordinates(i,j);
