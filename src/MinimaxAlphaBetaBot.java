@@ -15,18 +15,18 @@ public class MinimaxAlphaBetaBot extends Bot {
         return secButton;
     }
     @Override
-    public int[] move(Button[][] button, int roundLeft, boolean isBotFirst) {
-        return alphaBetaSearch(button, roundLeft, isBotFirst);
+    public int[] move(Button[][] button, int roundLeft, boolean isBotFirst, String botChar) {
+        return alphaBetaSearch(button, roundLeft, isBotFirst, botChar);
     }
-    public int[] alphaBetaSearch(Button[][] button, int roundLeft, boolean isBotFirst) {
+    public int[] alphaBetaSearch(Button[][] button, int roundLeft, boolean isBotFirst, String botChar) {
         Button[][] dumbButton = copyButton(button);
-        resultMinMax res = maxValue(dumbButton, roundLeft, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, isBotFirst);
+        resultMinMax res = maxValue(dumbButton, roundLeft, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, isBotFirst, botChar);
         return res.getNextPosition();
     }
-    public resultMinMax maxValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst) {
+    public resultMinMax maxValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst, String botChar) {
         List<int[]> emptyPos = generate_empty_cell(button);
         if (roundLeft == 0 || emptyPos.size() == 0) {
-            return new resultMinMax(null, objectiveFunction(null, button, roundLeft));
+            return new resultMinMax(null, objectiveFunction(null, button, roundLeft, botChar));
         }
 
         int newRoundLeft = roundLeft;
@@ -34,25 +34,28 @@ public class MinimaxAlphaBetaBot extends Bot {
 
         double currentValue = Double.NEGATIVE_INFINITY;
         int[] currentMove = null;
+        String oppChar;
+        if (botChar.equals("O")) oppChar = "X";
+        else oppChar = "O";
 
         long startTime = System.currentTimeMillis();
         for (int[] possiblePos : emptyPos) {
-            List<int[]> changeLabel = changeAdjacent(possiblePos, button, "O");
+            List<int[]> changeLabel = changeAdjacent(possiblePos, button, botChar);
 
             // Change label button
-            button[possiblePos[0]][possiblePos[1]].setText("O");
+            button[possiblePos[0]][possiblePos[1]].setText(botChar);
             if (changeLabel.size() > 0){
                 for(int[] adjPos:changeLabel){
-                    button[adjPos[0]][adjPos[1]].setText("O");
+                    button[adjPos[0]][adjPos[1]].setText(botChar);
                 }
             }
-            resultMinMax result = minValue(button, newRoundLeft, alpha, beta, isBotFirst);
+            resultMinMax result = minValue(button, newRoundLeft, alpha, beta, isBotFirst, oppChar);
 
             // Undo label changed
             button[possiblePos[0]][possiblePos[1]].setText("");
             if (changeLabel.size() > 0){
                 for(int[] adjPos:changeLabel){
-                    button[adjPos[0]][adjPos[1]].setText("X");
+                    button[adjPos[0]][adjPos[1]].setText(oppChar);
                 }
             }
 
@@ -66,7 +69,7 @@ public class MinimaxAlphaBetaBot extends Bot {
             long elapsedTime = System.currentTimeMillis() - startTime;
             if (elapsedTime > 5000){
                 System.out.println("System time out");
-                return getFallbackMove(button, "O");
+                return getFallbackMove(button, botChar, botChar);
                 /*
                 if (currentMove == null){
                     return getRandomMove(button);
@@ -79,10 +82,14 @@ public class MinimaxAlphaBetaBot extends Bot {
         return new resultMinMax(currentMove, currentValue);
     }
 
-    public resultMinMax minValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst) {
+    public resultMinMax minValue(Button[][] button, int roundLeft, double alpha, double beta, boolean isBotFirst, String oppChar) {
         List<int[]> emptyPos = generate_empty_cell(button);
+        String botChar;
+        if (oppChar.equals("O")) botChar = "X";
+        else botChar = "O";
+
         if (roundLeft == 0 || emptyPos.size() == 0) {
-            return new resultMinMax(null, objectiveFunction(null, button, roundLeft));
+            return new resultMinMax(null, objectiveFunction(null, button, roundLeft, botChar));
         }
 
         int newRoundLeft = roundLeft;
@@ -93,22 +100,22 @@ public class MinimaxAlphaBetaBot extends Bot {
 
         long startTime = System.currentTimeMillis();
         for (int[] possiblePos : emptyPos) {
-            List<int[]> changeLabel = changeAdjacent(possiblePos, button, "X");
+            List<int[]> changeLabel = changeAdjacent(possiblePos, button, oppChar);
 
             // Change label button
-            button[possiblePos[0]][possiblePos[1]].setText("X");
+            button[possiblePos[0]][possiblePos[1]].setText(oppChar);
             if (changeLabel.size() > 0){
                 for(int[] adjPos:changeLabel){
-                    button[adjPos[0]][adjPos[1]].setText("X");
+                    button[adjPos[0]][adjPos[1]].setText(oppChar);
                 }
             }
 
-            resultMinMax result = maxValue(button, newRoundLeft, alpha, beta, isBotFirst);
+            resultMinMax result = maxValue(button, newRoundLeft, alpha, beta, isBotFirst, botChar);
             // Undo label changed
             button[possiblePos[0]][possiblePos[1]].setText("");
             if (changeLabel.size() > 0){
                 for(int[] adjPos:changeLabel){
-                    button[adjPos[0]][adjPos[1]].setText("O");
+                    button[adjPos[0]][adjPos[1]].setText(botChar);
                 }
             }
 
@@ -123,7 +130,7 @@ public class MinimaxAlphaBetaBot extends Bot {
             long elapsedTime = System.currentTimeMillis() - startTime;
             if (elapsedTime > 5000){
                 System.out.println("System time out");
-                return getFallbackMove(button, "X");
+                return getFallbackMove(button, oppChar, botChar);
                 /*
                 if (currentMove == null){
                     return getRandomMove(button);
@@ -165,17 +172,17 @@ public class MinimaxAlphaBetaBot extends Bot {
         }
         return labelChanged;
     }
-    public resultMinMax getRandomMove(Button[][] button){
+    public resultMinMax getRandomMove(Button[][] button, String botChar){
         int i,j;
         do {
             i = (int) (Math.random()*8);
             j = (int) (Math.random()*8);
         } while (button[i][j].getText().equals(""));
         int[] move = {i, j};
-        int value = objectiveFunction(move, button, 0);
+        int value = objectiveFunction(move, button, 0, botChar);
         return new resultMinMax(move, value);
     }
-    public resultMinMax getFallbackMove(Button[][] button, String playerTurn){
+    public resultMinMax getFallbackMove(Button[][] button, String playerTurn, String botChar){
         List<int[]> emptyPos = generate_empty_cell(button);
         double maxVal = Double.NEGATIVE_INFINITY;
         int[] maxPosition = {-1, -1};
@@ -191,7 +198,7 @@ public class MinimaxAlphaBetaBot extends Bot {
                 }
             }
 
-            int value = objectiveFunction(possiblePos, button, 0);
+            int value = objectiveFunction(possiblePos, button, 0, botChar);
             if (value > maxVal) {
                 maxVal = value;
                 maxPosition = possiblePos;
