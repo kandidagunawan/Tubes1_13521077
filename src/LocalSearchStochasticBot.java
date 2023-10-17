@@ -60,10 +60,15 @@ public class LocalSearchStochasticBot extends Bot{
         return result;
     }
 
-    public int[] move(Button[][] button) {
+    public int[] move(Button[][] button, int roundLeft, boolean isBotFirst) {
         // create random move
         List<int[]> positions = generate_empty_cell(button);
 
+        if (roundLeft == 0 || positions.size() == 0) {
+            return new int[]{(int) Double.POSITIVE_INFINITY, (int) Double.POSITIVE_INFINITY};
+        }
+
+        long startTime = System.currentTimeMillis();
         int[] current = new int[2];
         int[] next = new int[2];
 
@@ -72,7 +77,7 @@ public class LocalSearchStochasticBot extends Bot{
         current[0] = positions.get(randomIdx)[0];
         current[1] = positions.get(randomIdx)[1];
 
-        int maxIteration = 100;
+        int maxIteration = 500;
         int iteration = 0;
         while (iteration < maxIteration) {
             int randomIdx2 = random.nextInt(0, positions.size());
@@ -82,6 +87,11 @@ public class LocalSearchStochasticBot extends Bot{
             if (objectiveFunction(next, button) > objectiveFunction(current, button)) {
                 current[0] = next[0];
                 current[1] = next[1];
+            }
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime > 5000) {
+                System.out.println("System time out");
+                return new int[]{current[0], current[1]};
             }
             iteration++;
         }

@@ -53,6 +53,7 @@ public class OutputFrameController {
     private Bot bot;
 
 
+
     private static final int ROW = 8;
     private static final int COL = 8;
     private Button[][] buttons = new Button[ROW][COL];
@@ -353,11 +354,10 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move(this.buttons);
+        int[] botMove = this.bot.move(this.buttons, this.roundsLeft, this.isBotFirst);
         int i = botMove[0];
         int j = botMove[1];
 
         this.selectedCoordinates(i, j);
-
     }
 }
