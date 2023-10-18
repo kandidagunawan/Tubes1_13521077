@@ -52,10 +52,9 @@ public class GeneticBot extends Bot{
 
     public int[][][]initializePopulation(List<int[]> emptyCells, int roundLeft){
 
-        if(roundLeft == 0){
+        if(roundLeft == 0 || emptyCells.isEmpty()){
             return new int[][][]{};
         } else {
-
         int[][][] population = new int[POPULATION_SIZE][][];
         for(int i = 0; i < POPULATION_SIZE; i++){
             int[][] chromosome = new int[roundLeft][2];
