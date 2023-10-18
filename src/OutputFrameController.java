@@ -453,6 +453,11 @@ public class OutputFrameController {
 
     private void BotVsBotGame() {
         Thread thread = new Thread(() -> {
+            for(int i = 0; i < buttons.length; i++){
+                for(int j = 0; j < buttons[0].length; j++){
+                    buttons[i][j].setDisable(true);
+                }
+            }
             while (this.roundsLeft > 0) {
                 try {
                     Thread.sleep(1000);
@@ -497,7 +502,7 @@ public class OutputFrameController {
     private void moveBot2() {
         Thread botThread = new Thread(() -> {
             int[] botMove = this.bot2.move(this.buttons, this.roundsLeft, this.isBotFirst, botChar2);
-            if (botMove.length != 0) {
+            if (botMove.length != 0 || botMove == null) {
                 int i = botMove[0];
                 int j = botMove[1];
 
