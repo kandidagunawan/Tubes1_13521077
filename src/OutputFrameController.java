@@ -477,7 +477,7 @@ public class OutputFrameController {
     private void moveBot() {
         Thread botThread = new Thread(() -> {
             int[] botMove = bot.move(this.buttons, this.roundsLeft, this.isBotFirst, botChar1);
-            if (botMove.length != 0) {
+            if (botMove.length != 0 || botMove == null) {
                 int i = botMove[0];
                 int j = botMove[1];
 

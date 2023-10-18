@@ -10,8 +10,13 @@ public class GeneticBot extends Bot{
     private static final int MAX_GENERATIONS = 100;
 
     public int[] move(Button[][] button, int roundLeft, boolean isBotFirst, String botChar) {
+
         int[][] bestChromosome = runGeneticAlgorithm(button, roundLeft, isBotFirst, botChar);
-        return bestChromosome[0];
+        if(bestChromosome.length == 0){
+            return new int[]{};
+        } else {
+            return bestChromosome[0];
+        }
     }
 
     public int[][] runGeneticAlgorithm(Button[][] buttons, int roundLeft, boolean isBotFirst, String botChar){
@@ -19,6 +24,10 @@ public class GeneticBot extends Bot{
         Random random = new Random();
         int[][] bestChromosome = null;
         int bestFitness = 0;
+
+        if(roundLeft == 0){
+            return new int[][]{};
+        }
         for(int gen = 0; gen < MAX_GENERATIONS; gen++){
             List<int[]>emptyCells = generate_empty_cell(buttons);
             int[][][] population = initializePopulation(emptyCells, roundLeft);
@@ -42,6 +51,10 @@ public class GeneticBot extends Bot{
 
     public int[][][]initializePopulation(List<int[]> emptyCells, int roundLeft){
         int[][][] population = new int[POPULATION_SIZE][][];
+
+        if(roundLeft == 0){
+            return new int[][][]{};
+        }
         for(int i = 0; i < POPULATION_SIZE; i++){
             int[][] chromosome = new int[roundLeft][2];
             for(int j = 0; j < roundLeft; j++){
