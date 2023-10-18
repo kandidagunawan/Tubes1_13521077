@@ -293,14 +293,13 @@ public class OutputFrameController {
                 // Bot's turn
                 this.moveBot2();
             } else if (this.playerOTurn) {
-                System.out.println("masuk O turn");
+
                 this.playerXBoxPane.setStyle("-fx-background-color: #90EE90; -fx-border-color: #D3D3D3;");
                 this.playerOBoxPane.setStyle("-fx-background-color: WHITE; -fx-border-color: #D3D3D3;");
                 this.buttons[i][j].setText("O");
                 this.playerOScore++;
 
                 // Update game board by changing surrounding cells to O if applicable.
-                System.out.println("sblm update board");
                 this.updateGameBoard(i, j);
                 this.playerOTurn = false;
                 this.playerXTurn = true;
@@ -453,6 +452,11 @@ public class OutputFrameController {
 
     private void BotVsBotGame() {
         Thread thread = new Thread(() -> {
+            for(int i = 0; i < buttons.length; i++){
+                for(int j = 0; j < buttons[0].length; j++){
+                    buttons[i][j].setDisable(true);
+                }
+            }
             while (this.roundsLeft > 0) {
                 try {
                     Thread.sleep(1000);
@@ -461,10 +465,8 @@ public class OutputFrameController {
                 }
                 Platform.runLater(() -> {
                     if (this.playerXTurn) {
-                        System.out.println("sini X");
                         moveBot();
                     } else if (this.playerOTurn) {
-                        System.out.println("sini O");
                         moveBot2();
                     }
                 });
@@ -477,15 +479,15 @@ public class OutputFrameController {
     private void moveBot() {
         Thread botThread = new Thread(() -> {
             int[] botMove = bot.move(this.buttons, this.roundsLeft, this.isBotFirst, botChar1);
-            if (botMove.length != 0 || botMove == null) {
+            if (botMove != null && botMove.length != 0) {
                 int i = botMove[0];
                 int j = botMove[1];
 
                 Platform.runLater(() -> {
-                    if(!botvsbotGame){
-                        this.selectedCoordinates(i ,j);
+                    if (!botvsbotGame) {
+                        this.selectedCoordinates(i, j);
                     } else {
-                        this.selectedCoordinatesBotVSBot(i,j);
+                        this.selectedCoordinatesBotVSBot(i, j);
                     }
                 });
             }
@@ -497,21 +499,20 @@ public class OutputFrameController {
     private void moveBot2() {
         Thread botThread = new Thread(() -> {
             int[] botMove = this.bot2.move(this.buttons, this.roundsLeft, this.isBotFirst, botChar2);
-            if (botMove.length != 0) {
+            if (botMove != null && botMove.length != 0) {
                 int i = botMove[0];
                 int j = botMove[1];
 
                 Platform.runLater(() -> {
-                    if(!botvsbotGame){
-                        this.selectedCoordinates(i ,j);
+                    if (!botvsbotGame) {
+                        this.selectedCoordinates(i, j);
                     } else {
-                        this.selectedCoordinatesBotVSBot(i,j);
+                        this.selectedCoordinatesBotVSBot(i, j);
                     }
                 });
             }
         });
 
         botThread.start();
-
     }
 }
