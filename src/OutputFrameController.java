@@ -91,7 +91,7 @@ public class OutputFrameController {
                 this.bot = new MinimaxAlphaBetaBot();
                 botChar1 = "X";
             } else if (botAlgoX.equals("Genetic")) {
-                this.bot = new Bot();
+                this.bot = new GeneticBot();
                 botChar1 = "X";
             }
 
@@ -102,7 +102,7 @@ public class OutputFrameController {
                 this.bot2 = new MinimaxAlphaBetaBot();
                 botChar2 = "O";
             } else if (botAlgoO.equals("Genetic")) {
-                this.bot2 = new Bot();
+                this.bot2 = new GeneticBot();
                 botChar2 = "O";
             }
             this.playerXTurn = !isBotFirst;
